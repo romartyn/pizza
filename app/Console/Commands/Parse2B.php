@@ -50,6 +50,8 @@ class Parse2B extends Command
         $REDUX_STATE = json_decode($matches[1][0]);
         // print_r(array_keys((array)$REDUX_STATE));return;
 
+        Image::truncate();
+
         Ingredient::truncate();
         foreach ($REDUX_STATE->ingredients as $key => $ingredient) {
             // print_r($ingredient);
@@ -130,7 +132,10 @@ class Parse2B extends Command
         $fileContent = file_get_contents($image_http_src);
 
         if($this->disk()->exists($path)){
-            return Image::query()->where('src', $path)->first();
+            $image = Image::query()->where('src', $path)->first();
+            if($image){
+                return $image;
+            }
         }
 
         if ($this->disk()->put($path, $fileContent)) {

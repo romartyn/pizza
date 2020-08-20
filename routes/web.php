@@ -13,8 +13,9 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('layouts.app');
+Route::get('/', 'ShopController@index');
+Route::get('/sticky', function () {
+    return view('layouts.sticky-footer');
 });
 
 Auth::routes();

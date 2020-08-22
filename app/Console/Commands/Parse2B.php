@@ -93,9 +93,9 @@ class Parse2B extends Command
                 'id' => $product->id,
                 'title' => $product->title,
                 'weight' => Str::slug($product->title),
-                'description' => $product->description,
-                'seo_description' => $product->seoDescription,
-                'short_description' => $product->shortDescription,
+                'description' => $this->process_description($product->description),
+                'seo_description' => $this->process_description($product->seoDescription),
+                'short_description' => $this->process_description($product->shortDescription),
                 'price' => $product->price,
                 'base_price' => $product->basePrice,
                 'unit_price' => $product->costPerUnit,
@@ -155,5 +155,9 @@ class Parse2B extends Command
     private function disk(){
         $this->disk = $this->disk ?? \Storage::disk('public');
         return $this->disk;
+    }
+
+    private function process_description($description){
+        return preg_replace("/<([a-z][a-z0-9]*)[^>]*?(\/?)>/si",'<$1$2>', $description);
     }
 }

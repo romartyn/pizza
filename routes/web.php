@@ -12,12 +12,14 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', 'ShopController@index');
-Route::get('/sticky', function () {
-    return view('layouts.sticky-footer');
-});
 
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/shop/get-cart', 'ShopController@get_cart');
+
+// Route::middleware(['auth'])->group(function () {
+	Route::post('/shop/add-to-cart', 'ShopController@add_to_cart');
+	Route::get('/shop/get-cart', 'ShopController@get_cart');
+// });

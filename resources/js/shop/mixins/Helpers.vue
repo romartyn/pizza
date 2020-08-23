@@ -12,8 +12,11 @@
                 let name = names[(number % 100 > 4 && number % 100 < 20) ? 2 : cases[(number % 10 < 5) ? number % 10 : 5]];
 
                 return show_number ? number + " " + name : name;
-            }
-            ,
+            },
+            $price_currency: function(price){
+                let currency = this.$store.state.cart.currencies[ this.$store.state.currency ];
+                return currency.sign + ' ' + (price / currency.rate).toFixed(2);
+            },
             $price: function (number, currency = true) {
                 number = parseInt(number);
                 return number.toLocaleString() + (currency ? " ₽" : "");

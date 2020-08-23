@@ -23,6 +23,8 @@
         "vue-template-compiler": "^2.6.12"
     },
     "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.14.0",
+        "bootstrap-vue": "^2.16.0",
         "dayjs": "^1.8.34",
         "v-mask": "^2.2.3",
         "vue": "^2.6.12",

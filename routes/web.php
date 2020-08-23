@@ -17,9 +17,10 @@ Route::get('/', 'ShopController@index');
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/orders', 'ShopController@orders')->name('orders');
 Route::get('/shop/get-cart', 'ShopController@get_cart');
 
 // Route::middleware(['auth'])->group(function () {
 	Route::post('/shop/add-to-cart', 'ShopController@add_to_cart');
-	Route::get('/shop/get-cart', 'ShopController@get_cart');
+	Route::post('/shop/store-order', 'ShopController@store_order');
 // });

@@ -1,11 +1,11 @@
 <template>
 	<div class="head-cart">
 		<div class="head-cart-inner" v-if="empty" @click="toggleCheckoutShow">
-			<div class="head-cart-caption btn btn-warning">Корзина пуста</div>			
+			<div class="head-cart-caption btn btn-warning">Cart is empty</div>			
 		</div>
 		<div class="head-cart-inner" v-else @click="toggleCheckoutShow">
-			<div class="head-cart-qnt btn btn-success">Всего товаров: {{ qnt }}</div>
-			<div class="head-cart-cost btn btn-success">На сумму: {{ $price_currency(cost) }}</div>
+			<div class="head-cart-qnt btn btn-success">Cart contains {{ this.cart.items.length }} items ({{ qnt }} goods) </div>
+			<div class="head-cart-cost btn btn-success">Cart items total: {{ $price_currency(cost) }}</div>
 		</div>
 		<div class="head-cart-inner currency-inner">
 			<button
@@ -29,7 +29,6 @@
 
 <style module>
 	.head-cart {
-		width: 100%;
 		display: flex;
 		justify-content: center;
 	}
@@ -82,6 +81,11 @@
 			setCurrency: function(currency){
 				this.$store.dispatch('SET_CURRENCY', currency);
 			}
+		},
+		created: function(){
+			this.$store.commit("SET_PRODUCTS",products.slice(0,12));
+			this.$store.commit("SET_CATEGORIES",categories);
+			this.$store.commit("SET_CART",cart);
 		}
 	}
 </script>

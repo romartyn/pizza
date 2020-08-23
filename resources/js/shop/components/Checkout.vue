@@ -1,6 +1,6 @@
 <template>
 	<div class="checkout" v-if="show">
-		<div class="checkout-form">
+		<form v-if="this.cart.items.length > 0" class="checkout-form was-validated" novalidate><!-- needs-validation -->
 			<div class="row">
 				<div class="col-md-4 order-md-2 mb-4">
 					<h4 class="d-flex justify-content-between align-items-center mb-3">
@@ -22,18 +22,25 @@
 						</li>
 
 						<hr class="mb-4">
-						<button class="btn btn-primary btn-lg btn-block" type="submit" @click="submit">Submit order</button>
+						<button class="btn btn-primary btn-lg btn-block" @click.stop.prevent="submit">Submit order</button>
 						<hr class="mb-4">
-						<button class="btn btn-warning btn-lg btn-block" type="submit" @click="toggleCheckoutShow">Keep on shopping</button>
+						<button class="btn btn-warning btn-lg btn-block" @click.stop.prevent="toggleCheckoutShow">Keep on shopping</button>
 					</ul>
 				</div>
 				<div class="col-md-8 order-md-1">
 					<h4 class="mb-3">Fill in the form</h4>
-					<form class="needs-validation needs-validation was-validated" novalidate="">
+					<!-- <form class="needs-validation needs-validation was-validated" novalidate=""> -->
 						
 						<div class="mb-3">
 							<label for="name">Contact name</label>
-							<input v-model="form.name" type="text" class="form-control" id="name" placeholder="" value="" required :state="true">
+							<input
+								v-model="form.name"
+								type="text"
+								class="form-control"
+								id="name"
+								required
+								:state="validate('name')"
+							>
 							<div class="invalid-feedback">
 								We need to know how to identify you.
 							</div>
@@ -52,7 +59,7 @@
 
 						<div class="mb-3">
 							<label for="email">Email</label>
-							<input v-model="form.email" type="email" class="form-control" id="email" placeholder="you@example.com" required>
+							<b-form-input v-model="form.email" type="email" required id="email"></b-form-input>
 							<div class="invalid-feedback">
 								Please enter a valid email address for shipping tracking and order history checking.
 							</div>
@@ -65,10 +72,56 @@
 								Please enter your shipping address.
 							</div>
 						</div>
-					</form>
+					<!-- </form> -->
 				</div>
 			</div>
-		</div>
+		</form>
+		<template v-else>
+			<div v-if="order" class="checkout-form">
+				<h1 class="text-center">Order #{{ order.id }} successfully sent</h1>
+				<div class="row">
+					<div class="col-md-3">
+						<strong>Name</strong>
+						<br>{{ order.name }}</div>
+					<div class="col-md-3">
+						<strong>Email</strong>
+						<br>{{ order.email }}</div>
+					<div class="col-md-3">
+						<strong>Phone</strong>
+						<br>{{ order.phone }}</div>
+					<div class="col-md-3">
+						<strong>Address</strong>
+						<br>{{ order.address }}</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<strong>Total</strong><br>{{ config.default_cart.currencies[ order.currency ].sign }} {{ order.total }}</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12" v-for="item in order.items">
+						<div style="font-weight: bold;">{{ item.product.title }}</div>
+						<div v-html="item.product.short_description"></div>
+						<div>Quantity: {{ config.default_cart.currencies[ order.currency ].sign }} {{ item.qnt }}</div>
+						<div>Price: {{ config.default_cart.currencies[ order.currency ].sign }} {{ item.price }}</div>
+						<div>Cost: {{ config.default_cart.currencies[ order.currency ].sign }} {{ item.cost }}</div>
+						<hr class="mb-4">
+					</div>
+				</div>
+				<div class="row">
+					<div class="col-md-12">
+						<button
+							class="btn btn-warning btn-lg btn-block"
+							@click.stop.prevent="toggleCheckoutShow(true)">Shop again!</button>
+					</div>
+				</div>
+			</div>
+			<div v-else class="checkout-form" style="padding: 10% 1em;">
+				<h1 class="text-center">Your cart is empty and no order can be sent</h1>
+				<button
+					class="btn btn-warning btn-lg btn-block"
+					@click.stop.prevent="toggleCheckoutShow">Go shopping!</button>
+			</div>
+		</template>
 	</div>
 </template>
 
@@ -93,15 +146,27 @@
 
 <script>
 	export default {
-		data: {
-			form: {
-				name: null,
-				phone: null,
-				email: null,
-				address: null,
+		data: function(){
+			return {
+				form: {
+					name: null,
+					phone: null,
+					email: null,
+					address: null,
+				}
+			};
+		},
+		watch: {
+			order: function(new_value, old_value){	console.log(new_value);
+				if(new_value.error){
+					this.$swal(new_value.error, '', 'error');
+				}
 			}
 		},
 		computed: {
+			order: function () {
+				return this.$store.state.order;
+			},
 			show: function () {
 				return this.$store.state.checkout_show;
 			},
@@ -124,12 +189,37 @@
 			currency: function () {
 				return this.$store.state.currency;
 			},
+			config: function() {
+				return this.$store.state.config;
+			}
 		},
 		methods: {
-			submit: function(){
-				//
+			validate: function(name){
+				switch (name) {
+					case 'name':
+						return this.form.name !== null && this.form.name.length > 3;
+					case 'phone':
+						return this.form.phone !== null && this.form.phone.length > 3;
+					case 'address':
+						return this.form.address !== null && this.form.address.length > 3;
+					case 'email':
+						return this.form.phone !== null && this.form.phone.length > 3;
+				}
 			},
-			toggleCheckoutShow: function(){
+			submit: function(){
+				for(let [key, value] of Object.entries(this.form)){
+					if(!this.validate(key)){
+						this.$swal('Please fill in the form properly!', '', 'error');
+						return;
+					}
+				}
+
+				this.$store.dispatch('STORE_ORDER', {
+					... this.form,
+					currency: this.currency
+				});
+			},
+			toggleCheckoutShow: function(again){
 				this.$store.state.checkout_show = !this.$store.state.checkout_show;
 			},
 		}

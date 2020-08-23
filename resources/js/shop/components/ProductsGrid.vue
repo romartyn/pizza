@@ -1,6 +1,6 @@
 <template>
 	<div class="row">
-		<div class="col-md-4" v-for="product in pizzas.slice(0,9)">
+		<div class="col-md-4" v-for="product in products">
 			<div class="card mb-4 shadow-sm">
 				<div
 					class="bd-placeholder-img card-img-top product-description"
@@ -46,11 +46,6 @@
 		components: {
 			AddToCart
 		},
-		data: function() {
-			return {
-				//
-			}
-		},
 		methods: {
 			src: function(product){
 				return product.images.length ? `/storage/${product.images[0].src}` : ''
@@ -60,13 +55,6 @@
 			products: function () {
 				return this.$store.state.products;
 			},
-			pizzas: function(){
-				// return this.$store.state.products.filter(p => p.base_category == 2 && p.images.length > 0);
-				return this.products.filter(p => p.title.toLowerCase().match('пицца'))/*.map(x => {
-					console.log(x);
-					return x;
-				})*/;
-			}
 		}
 	}
 </script>

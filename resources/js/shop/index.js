@@ -1,6 +1,7 @@
 import Vue from 'vue';
 import {store} from './store/store.js';
 import App from "./App.vue";
+import HeadCart from "./components/HeadCart.vue";
 import Helpers from "./mixins/Helpers";
 import { BootstrapVue } from 'bootstrap-vue';
 
@@ -15,6 +16,16 @@ Vue.use(BootstrapVue);
 Vue.directive('mask', VueMaskDirective);
 Vue.mixin(Helpers);
 
-new Vue({
+let application = new Vue({
     render: h => h(App), store
-}).$mount("#shop");
+});
+
+let shop_div = document.getElementById('shop');
+
+if(shop_div){
+	application.$mount("#shop");
+} else {
+	new Vue({
+	    render: h => h(HeadCart), store
+	}).$mount("#head_cart");
+}

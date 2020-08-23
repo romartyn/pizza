@@ -28,10 +28,6 @@
             Checkout
         },
         created: async function () {
-            this.$store.dispatch("FETCH_PRODUCTS");
-            this.$store.dispatch("FETCH_CATEGORIES");
-            await this.$store.dispatch("FETCH_CART");
-
             new Vue({
                 render: h => h(HeadCart), store: this.$store
             }).$mount("#head_cart");

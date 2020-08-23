@@ -14,7 +14,10 @@
 			>
 				<i class="fas fa-cart-plus"></i> {{ to_cart_text }}</button>
 		</div>
-		<strong class="text-primary" style="font-size: xx-large;line-height: 1;">{{ $price_currency(product.base_price) }}</strong>
+		<strong
+			class="text-primary"
+			style="font-size: xx-large;line-height: 1;"
+		>{{ $price_currency(product.base_price) }}</strong>
 	</div>
 </template>
 
@@ -25,7 +28,8 @@
 		},
 		computed: {
 			to_cart_text: function(){
-				return this.index >= 0 ? 'Убрать' : 'В корзину'
+				let qnt = this.index >= 0 ? this.$store.state.cart.items[this.index].qnt : 0;
+				return this.index >= 0 ? `Uncart ${qnt}` : 'Add to cart'
 			},
 			index: function(){
 				return this.$store.state.cart.items.findIndex(

@@ -14,8 +14,8 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/products', 'ShopController@products')->name('products');
-Route::get('/categories', 'ShopController@categories')->name('categories');
+Route::match(['post', 'get'], '/products', 'ShopController@products')->name('products');
+Route::match(['post', 'get'], '/categories', 'ShopController@categories')->name('categories');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();

@@ -35,7 +35,8 @@ export const store = new Vuex.Store({
 			}
 		},
 		currency: localStorage.getItem('currency') || 'dollar',
-		checkout_show: false,
+		checkout_show: true,
+		order: null,
 		cart: {
 			items: [],
 			currencies: {
@@ -52,6 +53,19 @@ export const store = new Vuex.Store({
 			(state, data) => {
 				state.currency = data;
 				localStorage.setItem('currency', data);
+			},
+		SET_ORDER:
+			(state, data) => {
+				if(data.error){
+					console.error(data);
+					state.order = {
+						error: data.error
+					};
+				} else {
+					console.warn(data);
+					state.order = data.order;
+					state.cart = data.cart;
+				}
 			},
 		SET_CART:
 			(state, data) => {
@@ -81,6 +95,16 @@ export const store = new Vuex.Store({
 				console.log(error);
 			});
 		},
+		STORE_ORDER: (context, data) => {
+			axios.post(`/shop/store-order`, {
+				_method: "POST",
+				... data
+			}).then((response) => {
+				context.commit('SET_ORDER', response.data);
+			}).catch((error) => {
+				console.log(error);
+			});
+		},
 		FETCH_CART: (context, data) => {
 			axios.get('/shop/get-cart')
 				.then(response => {
@@ -91,13 +115,15 @@ export const store = new Vuex.Store({
 				});
 		},
 		FETCH_PRODUCTS: (context, data) => {
-			axios.get('/api/products')
-				.then(response => {
-					context.commit('SET_PRODUCTS', response.data);
-				})
-				.catch(error => {
-					context.commit('SET_PRODUCTS', []);
-				});
+			axios.post('/api/products', {
+				_method: "POST",
+				... data
+			}).then(response => {
+				context.commit('SET_PRODUCTS', response.data);
+			})
+			.catch(error => {
+				context.commit('SET_PRODUCTS', []);
+			});
 		},
 		FETCH_CATEGORIES: (context, data) => {
 			axios.get('/api/categories')

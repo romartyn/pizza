@@ -13,8 +13,8 @@
 
                 return show_number ? number + " " + name : name;
             },
-            $price_currency: function(price){
-                let currency = this.$store.state.cart.currencies[ this.$store.state.currency ];
+            $price_currency: function(price, _currency){
+                let currency = this.$store.state.cart.currencies[ _currency || this.$store.state.currency ];
                 return currency.sign + ' ' + (price / currency.rate).toFixed(2);
             },
             $price: function (number, currency = true) {

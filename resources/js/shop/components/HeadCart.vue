@@ -31,12 +31,18 @@
 	.head-cart {
 		display: flex;
 		justify-content: center;
+		flex-wrap: wrap;
 	}
 	.head-cart-inner {
 		display: flex;
 	}
 	.head-cart-qnt, .head-cart-cost, .head-cart-caption {
 		margin: 0 .5em;
+	}
+	@media (max-width: 1199px) {
+		.head-cart-qnt, .head-cart-cost, .head-cart-caption {
+			margin: .5em;
+		}
 	}
 	.currency-inner {
 		/*min-width: 4.7rem;*/
@@ -48,6 +54,10 @@
 	} .currency-btn.active {
 		background: #ccc;
 		color: teal;
+	} @media (max-width: 1199px) {
+		.currency-btn {
+			margin: .5em;
+		}
 	}
 </style>
 

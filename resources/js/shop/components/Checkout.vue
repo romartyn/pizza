@@ -21,16 +21,18 @@
 							<strong>{{ $price_currency(cost) }}</strong>
 						</li>
 
-						<hr class="mb-4">
-						<button class="btn btn-primary btn-lg btn-block" @click.stop.prevent="submit">Submit order</button>
-						<hr class="mb-4">
-						<button class="btn btn-warning btn-lg btn-block" @click.stop.prevent="toggleCheckoutShow">Keep on shopping</button>
+						<div class="buttons-upper">
+							<hr class="mb-2">
+							<button class="btn btn-primary btn-lg btn-block" @click.stop.prevent="submit">Submit order</button>
+							<hr class="mb-2">
+							<button class="btn btn-warning btn-lg btn-block" @click.stop.prevent="toggleCheckoutShow">Keep on shopping</button>
+						</div>
 					</ul>
 				</div>
 				<div class="col-md-8 order-md-1">
 					<h4 class="mb-3">Fill in the form</h4>
 					<!-- <form class="needs-validation needs-validation was-validated" novalidate=""> -->
-						
+
 						<div class="mb-3">
 							<label for="name">Contact name</label>
 							<input
@@ -71,6 +73,13 @@
 							<div class="invalid-feedback">
 								Please enter your shipping address.
 							</div>
+						</div>
+
+						<div class="buttons-lower">
+							<hr class="mb-2">
+							<button class="btn btn-primary btn-lg btn-block" @click.stop.prevent="submit">Submit order</button>
+							<hr class="mb-2">
+							<button class="btn btn-warning btn-lg btn-block" @click.stop.prevent="toggleCheckoutShow">Keep on shopping</button>
 						</div>
 					<!-- </form> -->
 				</div>
@@ -134,6 +143,11 @@
 		background: rgba(0,0,0,.5);
 		padding: 5em;
 	}
+	@media (max-width: 1199px) {
+		.checkout {
+			padding: .5em;
+		}
+	}
 	.checkout-form {
 		background: rgba(255,255,255,.9);
 		width: 100%;
@@ -141,6 +155,23 @@
 		padding: 1em;
 		overflow-y: scroll;
 		overflow-x: hidden;
+	}
+
+	.buttons-upper {
+		/**/
+	}
+	@media (max-width: 1199px) {
+		.buttons-upper {
+			display: none;
+		}
+	}
+	.buttons-lower {
+		display: none;
+	}
+	@media (max-width: 1199px) {
+		.buttons-lower {
+			display: block;
+		}
 	}
 </style>
 

@@ -16,7 +16,7 @@
 		</div>
 		<strong
 			class="text-primary"
-			style="font-size: xx-large;line-height: 1;"
+			style="font-size: xx-large;line-height: 1;text-align: right;"
 		>{{ $price_currency(product.base_price) }}</strong>
 	</div>
 </template>

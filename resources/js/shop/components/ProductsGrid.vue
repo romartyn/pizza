@@ -1,7 +1,7 @@
 <template>
 	<div class="row">
 		<div class="col-md-4" v-for="product in products">
-			<div class="card mb-4 shadow-sm">
+			<div class="card mb-4 shadow-sm product-card">
 				<div
 					class="bd-placeholder-img card-img-top product-description"
 					:style="{
@@ -35,7 +35,7 @@
 		cursor: pointer;
 		line-height: 100%;
 	}
-	.background-description:hover {
+	.product-card:hover .background-description {
 		opacity: 1;
 	}
 </style>

@@ -35,7 +35,7 @@ export const store = new Vuex.Store({
 			}
 		},
 		currency: localStorage.getItem('currency') || 'dollar',
-		checkout_show: true,
+		checkout_show: false,
 		order: null,
 		cart: {
 			items: [],
